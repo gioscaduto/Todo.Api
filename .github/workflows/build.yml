@@ -11,7 +11,9 @@ jobs:
         versionamento:
           runs-on: ubuntu-latest
           name: Versionamento
-
+          permissions: 
+            contents: write
+            
           steps:
             - name: Checkout code
               uses: actions/checkout@v4
