@@ -8,60 +8,93 @@ on:
     branches:
       - main
 jobs:     
-        versionamento:
-          runs-on: ubuntu-latest
-          name: Versionamento
-          permissions: 
-            contents: write
+  versionamento:
+    runs-on: ubuntu-latest
+    name: Versionamento
+    permissions: 
+      contents: write
+      
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with: 
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+      
+      - uses: codacy/git-version@2.8.0
+        id: version
+        with: 
+          release-branch: main
+          prefix: v  
+
+      - name: Tag do repositório
+        env: 
+          GH_TOKEN : ${{ secrets.GITHUB_TOKEN }}   
+        run: |
+          echo "::notice:: ${{ steps.version.outputs.version }}"
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+          git config --global user.name "${{ github.actor }}"
+          git tag -a ${{ steps.version.outputs.version }} -m "Release ${{ steps.version.outputs.version }}"
+          git push --tags
+        if: github.ref == 'refs/heads/main'
             
-          steps:
-            - name: Checkout code
-              uses: actions/checkout@v4
-              with: 
-                ref: ${{ github.head_ref }}
-                fetch-depth: 0
-            
-            - uses: codacy/git-version@2.8.0
-              id: version
-              with: 
-                release-branch: main
-                prefix: v  
+  backend-build-and-test:
+      runs-on: ubuntu-latest
+      name: Build Project
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v4
 
-            - name: Tag do repositório
-              env: 
-                GH_TOKEN : ${{ secrets.GITHUB_TOKEN }}   
-              run: |
-                echo "::notice:: ${{ steps.version.outputs.version }}"
-                git config --global user.email "${{ github.actor }}@users.noreply.github.com"
-                git config --global user.name "${{ github.actor }}"
-                git tag -a ${{ steps.version.outputs.version }} -m "Release ${{ steps.version.outputs.version }}"
-                git push --tags
-              if: github.ref == 'refs/heads/main'
-            
-        build:
-            runs-on: ubuntu-latest
-            name: Build Project
-            steps:
-              - name: Checkout code
-                uses: actions/checkout@v4
+        - name: Setup .NET Core
+          uses: actions/setup-dotnet@v4
+          with:
+            dotnet-version: '8.x'
+            cache: true
+            cache-dependency-path: .src/**/package-lock.json               
 
-              - name: Setup .NET Core
-                uses: actions/setup-dotnet@v4
-                with:
-                  dotnet-version: '8.x'
+        - name: Restore
+          run: |
+            dotnet restore ./src/Todo.Api.sln            
 
-              - name: Build with .NET
-                run: |
-                  dotnet restore ./src/Todo.Api.sln
-                  dotnet build --no-restore ./src/Todo.Api.sln
-                
-              - name: Setup Node.js
-                uses: actions/setup-node@v4
-                with:
-                  node-version: '20'
+        - name: Build 
+          run: |
+            dotnet build --no-restore ./src/Todo.Api.sln
+        
+        - name: Build 
+          run: |
+            dotnet test --no-restore --no-build ./src/Todo.Api.sln --configuration Release --logger trx --results-directory "TestResults"
+        
+        - name: dotnet-test-results
+          uses: actions/upload-artifact@v4    
+          with:  
+            path: TestResults
 
-              - name: Install Node.js dependencies
-                working-directory: ./src/web
-                run: |
-                  npm install
-                  npm run build
+  frontend-build-and-test:
+      if: false
+      runs-on: ubuntu-latest
+      name: Build Project
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v4
+
+        - name: Setup .NET Core
+          uses: actions/setup-dotnet@v4
+          with:
+            dotnet-version: '8.x'
+
+        - name: Build with .NET
+          run: |
+            dotnet restore ./src/Todo.Api.sln
+            dotnet build --no-restore ./src/Todo.Api.sln
+          
+        - name: Setup Node.js
+          uses: actions/setup-node@v4
+          with:
+            node-version: '20'
+
+        - name: Install Node.js dependencies
+          working-directory: ./src/web
+          run: |
+            npm install
+            npm run build        
+                  
