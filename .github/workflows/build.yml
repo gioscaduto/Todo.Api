@@ -75,7 +75,7 @@ jobs:
       needs: versionamento
       runs-on: ubuntu-latest
       name: Frontend Build and Test
-      default:
+      defaults:
         run:
           working-directory: ./src/web
       
