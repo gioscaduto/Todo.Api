@@ -58,7 +58,7 @@ jobs:
 
         - name: Build 
           run: |
-            dotnet build --no-restore ./src/Todo.Api.sln
+            dotnet build --no-restore --configuration Release ./src/Todo.Api.sln
         
         - name: Test 
           run: |
@@ -73,7 +73,7 @@ jobs:
       if: false
       runs-on: ubuntu-latest
       name: Frontend Build and Test
-      
+
       steps:
         - name: Checkout code
           uses: actions/checkout@v4
