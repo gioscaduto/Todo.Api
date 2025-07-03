@@ -79,7 +79,7 @@ jobs:
   frontend-build-and-test:
       if: false
       runs-on: ubuntu-latest
-      name: Build Project
+      name: Frontend Build and Test
       steps:
         - name: Checkout code
           uses: actions/checkout@v4
