@@ -52,7 +52,6 @@ jobs:
           with:
             dotnet-version: '8.x'
             
-
         - name: Restore
           run: |
             dotnet restore ./src/Todo.Api.sln            
@@ -74,6 +73,7 @@ jobs:
       if: false
       runs-on: ubuntu-latest
       name: Frontend Build and Test
+      
       steps:
         - name: Checkout code
           uses: actions/checkout@v4
