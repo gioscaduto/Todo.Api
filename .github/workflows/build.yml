@@ -41,7 +41,12 @@ jobs:
   backend-build-and-test:
       needs: versionamento
       runs-on: ubuntu-latest
-      name: Build Project
+      name: Backend Build and Test
+      permissions: 
+        contents: read
+        actions: write
+        checks: write
+
       steps:
         - name: Checkout code
           uses: actions/checkout@v4
