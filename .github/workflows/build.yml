@@ -126,7 +126,7 @@ jobs:
           run: |
             npm run build        
 
-frontend-lint:
+  frontend-lint:
       needs: versionamento
       runs-on: ubuntu-latest
       name: Frontend Lint
