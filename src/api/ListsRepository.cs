@@ -11,6 +11,11 @@ public class ListsRepository
         _db = db;
     }
 
+    public async Task<IEnumerable<TodoList>> GetListsAsyncByRawSql(string listName)
+    {
+        return await _db.Lists.FromSqlRaw($"SELECT * FROM Lists WHERE Name = '{listName}'").ToListAsync();
+    }
+
     public async Task<IEnumerable<TodoList>> GetListsAsync(int? skip, int? batchSize)
     {
         return await ToListAsync(_db.Lists, skip, batchSize);
