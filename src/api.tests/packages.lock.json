@@ -1731,6 +1731,7 @@
           "Microsoft.AspNetCore.OpenApi": "[8.0.0, )",
           "Microsoft.Data.SqlClient": "[5.1.3, )",
           "Microsoft.EntityFrameworkCore.SqlServer": "[8.0.0, )",
+          "Newtonsoft.Json": "[12.0.3, )",
           "Swashbuckle.AspNetCore": "[6.5.0, )",
           "Swashbuckle.AspNetCore.SwaggerUI": "[6.5.0, )",
           "System.Drawing.Common": "[8.0.0, )"
