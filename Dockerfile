@@ -10,4 +10,4 @@ EXPOSE 8080
 
 # Run the app
 ENV ASPNETCORE_URLS=http://+:8080
-ENTRYPOINT ["dotnet", "./app/Todo.Api.dll"]
+ENTRYPOINT ["dotnet", "./Todo.Api.dll"]
