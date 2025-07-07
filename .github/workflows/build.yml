@@ -225,7 +225,8 @@ jobs:
       - name: Tag Docker Image as Latest
         run: |
           docker tag ${{ vars.DOCKERHUB_REPOSITORY }}:${{ env.version }} ${{ vars.DOCKERHUB_REPOSITORY }}:latest
-      
+        if: github.ref == 'refs/heads/main'  
+
       - name: Docker Login
         uses: docker/login-action@v3
         with:
