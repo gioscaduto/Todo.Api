@@ -1,8 +1,8 @@
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 as Base
 
 # Copy application files
-COPY ./app/api ./app
-COPY ./app/web ./app/wwwroot
+COPY ./src/api ./app
+COPY ./src/web ./app/wwwroot
 
 # Set working directory
 WORKDIR /app
