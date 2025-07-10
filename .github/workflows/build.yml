@@ -98,7 +98,7 @@ jobs:
             VALIDATE_CSHARP: true
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             
-      if: github.ref != 'refs/heads/main'
+      # if: github.ref != 'refs/heads/main'
 
   frontend-build-and-test:
       needs: versionamento
@@ -172,7 +172,7 @@ jobs:
         with:
           comment-summary-in-pr: always
           
-    if: github.ref != 'refs/heads/main'
+    #if: github.ref != 'refs/heads/main'
 
   code-security-check:
     needs: versionamento
